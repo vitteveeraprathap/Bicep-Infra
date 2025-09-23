@@ -1,30 +1,46 @@
-// main.bicep - Subscription level deployment
+// main.bicep - Resource group level deployment
 param location string = 'eastus'
-param environment string
 param appServiceName string
 param appServicePlanName string
 param acrName string
 
-// Deploy resource group
-resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${environment}-rg'
+// Create Container Registry
+resource acr 'Microsoft.ContainerRegistry/registries@2023-06-01' = {
+  name: acrName
   location: location
-}
-
-// Deploy resources in the resource group using a module
-module deployResources 'resources.bicep' = {
-  scope: rg
-  name: 'resourcesDeployment'
-  params: {
-    location: location
-    environment: environment
-    appServiceName: appServiceName
-    appServicePlanName: appServicePlanName
-    acrName: acrName
+  sku: {
+    name: 'Basic'
+  }
+  properties: {
+    adminUserEnabled: true
   }
 }
 
-// Output the ACR login server
-output acrLoginServer string = deployResources.outputs.acrLoginServer
-output resourceGroupId string = rg.id
-output appServiceId string = deployResources.outputs.appServiceId
+// Create App Service Plan
+resource plan 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: appServicePlanName
+  location: location
+  sku: {
+    name: 'B1'
+    tier: 'Basic'
+  }
+  kind: 'linux'
+  properties: {
+    reserved: true
+  }
+}
+
+// Create Web App
+resource webApp 'Microsoft.Web/sites@2022-03-01' = {
+  name: appServiceName
+  location: location
+  kind: 'app,linux'
+  properties: {
+    serverFarmId: plan.id
+  }
+}
+
+// Outputs
+output acrLoginServer string = acr.properties.loginServer
+output appServiceId string = webApp.id
+output planId string = plan.id
