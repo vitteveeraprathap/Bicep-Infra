@@ -1,22 +1,39 @@
 
 param location string = 'eastus'
-param appName string = 'my-java-app'
-param appServicePlanSku string = 'B1'
+param environment string
+param appServiceName string
+param appServicePlanName string
+param acrName string
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
-  name: '${appName}-plan'
+resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: '${environment}-rg'
+  location: location
+}
+
+resource acr 'Microsoft.ContainerRegistry/registries@2022-05-01' = {
+  name: acrName
+  location: location
+  sku: 'Basic'
+  properties: {
+    adminUserEnabled: true
+  }
+}
+
+resource plan 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: appServicePlanName
   location: location
   sku: {
-    name: appServicePlanSku
+    name: 'B1'
     tier: 'Basic'
   }
 }
 
 resource webApp 'Microsoft.Web/sites@2022-03-01' = {
-  name: appName
+  name: appServiceName
   location: location
   properties: {
-    serverFarmId: appServicePlan.id
+    serverFarmId: plan.id
   }
 }
-output webAppUrl string = webApp.properties.defaultHostName
+
+output acrLoginServer string = acr.properties.loginServer

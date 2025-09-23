@@ -1,0 +1,35 @@
+
+name: Deploy Azure Infrastructure
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'infra/**'
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set environment
+        id: env
+        run: |
+          branch="${GITHUB_REF##*/}"
+          if [ "$branch" == "develop" ]; then
+            echo "env_name=qa" >> $GITHUB_OUTPUT
+          elif [ "$branch" == "main" ]; then
+            echo "env_name=prod" >> $GITHUB_OUTPUT
+
+      - name: Deploy Bicep Template
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az deployment sub create               --name "infra-${{ steps.env.outputs.env_name }}"               --location eastus               --template-file infra/main.bicep               --parameters @infra/parameters.${{ steps.env.outputs.env_name }}.json
