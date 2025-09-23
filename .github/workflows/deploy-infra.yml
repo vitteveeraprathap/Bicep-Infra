@@ -34,8 +34,6 @@ jobs:
           az bicep upgrade
           az bicep version
 
-      
-
       - name: Deploy Bicep Template
         run: |
           az deployment sub create \
