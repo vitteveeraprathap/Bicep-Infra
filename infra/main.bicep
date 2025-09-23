@@ -12,7 +12,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 }
 
 // Deploy resources in the resource group using a module
-module resources 'infra/resources.bicep' = {
+module deployResources 'resources.bicep' = {
   scope: rg
   name: 'resourcesDeployment'
   params: {
@@ -25,6 +25,6 @@ module resources 'infra/resources.bicep' = {
 }
 
 // Output the ACR login server
-output acrLoginServer string = resources.outputs.acrLoginServer
+output acrLoginServer string = deployResources.outputs.acrLoginServer
 output resourceGroupId string = rg.id
-output appServiceId string = resources.outputs.appServiceId
+output appServiceId string = deployResources.outputs.appServiceId
