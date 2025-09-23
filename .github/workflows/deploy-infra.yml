@@ -27,9 +27,20 @@ jobs:
             echo "env_name=qa" >> $GITHUB_OUTPUT
           elif [ "$branch" == "main" ]; then
             echo "env_name=prod" >> $GITHUB_OUTPUT
+      
+      - name: Ensure Bicep CLI is installed
+        run: |
+          az bicep install
+          az bicep upgrade
+          az bicep version
+
+      
 
       - name: Deploy Bicep Template
-        uses: azure/cli@v2
-        with:
-          inlineScript: |
-            az deployment sub create               --name "infra-${{ steps.env.outputs.env_name }}"               --location eastus               --template-file infra/main.bicep               --parameters @infra/parameters.${{ steps.env.outputs.env_name }}.json
+        run: |
+          az deployment sub create \
+            --name "resourceGroup-${GITHUB_RUN_ID}" \
+            --name "infra-${{ steps.env.outputs.env_name }}" \
+            --location "eastus" \
+            --template-file "infra/main.bicep" \               
+            --parameters @infra/parameters.${{ steps.env.outputs.env_name }}.json
