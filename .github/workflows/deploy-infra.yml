@@ -22,13 +22,17 @@ jobs:
         id: env
         run: |
           branch="${GITHUB_REF##*/}"
-          if [ "$branch" == "develop" ]; then
-            echo "env_name=qa" >> $GITHUB_OUTPUT
-          elif [ "$branch" == "main" ]; then
-            echo "env_name=prod" >> $GITHUB_OUTPUT
-          else
-            echo "env_name=dev" >> $GITHUB_OUTPUT
-          fi
+          case "$branch" in
+            develop)
+              echo "env_name=qa" >> $GITHUB_OUTPUT
+              ;;
+            main)
+              echo "env_name=prod" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "env_name=dev" >> $GITHUB_OUTPUT
+              ;;
+          esac
       
       - name: Ensure Bicep CLI is installed
         run: |
