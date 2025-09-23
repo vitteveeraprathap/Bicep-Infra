@@ -1,4 +1,3 @@
-
 name: Deploy Azure Infrastructure
 
 on:
@@ -27,8 +26,10 @@ jobs:
             echo "env_name=qa" >> $GITHUB_OUTPUT
           elif [ "$branch" == "main" ]; then
             echo "env_name=prod" >> $GITHUB_OUTPUT
+          else
+            echo "env_name=dev" >> $GITHUB_OUTPUT
           fi
-          
+      
       - name: Ensure Bicep CLI is installed
         run: |
           az bicep install
@@ -38,8 +39,7 @@ jobs:
       - name: Deploy Bicep Template
         run: |
           az deployment sub create \
-            --name "resourceGroup-${GITHUB_RUN_ID}" \
-            --name "infra-${{ steps.env.outputs.env_name }}" \
+            --name "infra-${{ steps.env.outputs.env_name }}-${GITHUB_RUN_ID}" \
             --location "eastus" \
-            --template-file "infra/main.bicep" \               
+            --template-file "infra/main.bicep" \
             --parameters @infra/parameters.${{ steps.env.outputs.env_name }}.json
