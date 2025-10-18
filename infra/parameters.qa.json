@@ -5,6 +5,6 @@
     "appServiceName": { "value": "javaapp-qa" },
     "appServicePlanName": { "value": "javaapp-qa-plan" },
     "acrName": { "value": "myacrqa123" },
-    "location": { "value": "eastus" }
+    "location": { "value": "westus3" }
   }
 }
