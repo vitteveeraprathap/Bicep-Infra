@@ -26,6 +26,6 @@ resource webApp 'Microsoft.Web/sites@2021-01-15' = {
 }
 
 // Outputs
-//output acrLoginServer string = acr.properties.loginServer
+
 output appServiceId string = webApp.id
 output planId string = plan.id

@@ -4,7 +4,6 @@
   "parameters": {
     "appServiceName": { "value": "javaapp-qa" },
     "appServicePlanName": { "value": "javaapp-qa-plan" },
-    "acrName": { "value": "myacrqa123" },
     "location": { "value": "westus3" }
   }
 }
