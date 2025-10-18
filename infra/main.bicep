@@ -2,45 +2,30 @@
 param location string = 'westus3'
 param appServiceName string
 param appServicePlanName string
-param acrName string
 
-// Create Container Registry
-resource acr 'Microsoft.ContainerRegistry/registries@2023-06-01' = {
-  name: acrName
-  location: location
-  sku: {
-    name: 'Basic'
-  }
-  properties: {
-    adminUserEnabled: true
-  }
-}
 
 // Create App Service Plan
-resource plan 'Microsoft.Web/serverfarms@2022-03-01' = {
+resource plan 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: appServicePlanName
   location: location
   sku: {
-    name: 'F1'
-    tier: 'Free'
-  }
-  kind: 'linux'
-  properties: {
-    reserved: false
+    name: 'B1'
+    capacity: 1
   }
 }
 
-// Create Web App
-resource webApp 'Microsoft.Web/sites@2022-03-01' = {
+resource webApp 'Microsoft.Web/sites@2021-01-15' = {
   name: appServiceName
   location: location
-  kind: 'app,linux'
+  tags: {
+    'hidden-related:${resourceGroup().id}/providers/Microsoft.Web/serverfarms/appServicePlan': 'Resource'
+  }
   properties: {
     serverFarmId: plan.id
   }
 }
 
 // Outputs
-output acrLoginServer string = acr.properties.loginServer
+//output acrLoginServer string = acr.properties.loginServer
 output appServiceId string = webApp.id
 output planId string = plan.id
