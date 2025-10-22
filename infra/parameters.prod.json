@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appServiceName": { "value": "javaapp-prod" },
-    "appServicePlanName": { "value": "javaapp-prod-plan" },
-    "location": { "value": "southeastasia" }
+    "appServicePlanName": { "value": "javaapp-prod-plan" }
+
   }
 }

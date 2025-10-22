@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appServiceName": { "value": "javaapp-qa" },
-    "appServicePlanName": { "value": "javaapp-qa-plan" },
-    "location": { "value": "southeastasia" }
+    "appServicePlanName": { "value": "javaapp-qa-plan" }
   }
 }
