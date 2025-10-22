@@ -1,4 +1,4 @@
-// main.bicep - Resource group level deploy
+// main.bicep - Resource group level deployment
 param location string = 'westus3'
 param appServiceName string
 param appServicePlanName string
