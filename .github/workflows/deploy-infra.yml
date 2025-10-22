@@ -44,7 +44,7 @@ jobs:
         run: |
           az group create \
             --name "${{ steps.env.outputs.env_name }}-rg" \
-            --location "westus3"
+            --location "southeastasia"
 
       - name: Deploy Bicep Template
         run: |
