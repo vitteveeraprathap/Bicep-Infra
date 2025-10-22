@@ -4,6 +4,6 @@
   "parameters": {
     "appServiceName": { "value": "javaapp-prod" },
     "appServicePlanName": { "value": "javaapp-prod-plan" },
-    "location": { "value": "westus3" }
+    "location": { "value": "southeastasia" }
   }
 }
