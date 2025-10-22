@@ -25,31 +25,32 @@ jobs:
           case "$branch" in
             develop)
               echo "env_name=qa" >> $GITHUB_OUTPUT
+              echo "resource_group=sandbox" >> $GITHUB_OUTPUT
+              echo "location=westus2" >> $GITHUB_OUTPUT
               ;;
             main)
               echo "env_name=prod" >> $GITHUB_OUTPUT
+              echo "resource_group=sandbox" >> $GITHUB_OUTPUT
+              echo "location=westus2" >> $GITHUB_OUTPUT
               ;;
             *)
               echo "env_name=dev" >> $GITHUB_OUTPUT
+              echo "resource_group=sandbox" >> $GITHUB_OUTPUT
+              echo "location=westus2" >> $GITHUB_OUTPUT
               ;;
           esac
-      
+
       - name: Ensure Bicep CLI is installed
         run: |
           az bicep install
           az bicep upgrade
           az bicep version
 
-      - name: Create Resource Group
-        run: |
-          az group create \
-            --name "${{ steps.env.outputs.env_name }}-rg" \
-            --location "southeastasia"
-
       - name: Deploy Bicep Template
         run: |
           az deployment group create \
             --name "infra-${{ steps.env.outputs.env_name }}-${GITHUB_RUN_ID}" \
-            --resource-group "${{ steps.env.outputs.env_name }}-rg" \
+            --resource-group "${{ steps.env.outputs.resource_group }}" \
             --template-file "infra/main.bicep" \
-            --parameters @infra/parameters.${{ steps.env.outputs.env_name }}.json
+            --parameters @infra/parameters.${{ steps.env.outputs.env_name }}.json \
+            --parameters location=${{ steps.env.outputs.location }}

@@ -1,5 +1,5 @@
 // main.bicep - Resource group level deployment
-param location string = 'southeastasia'
+param location string = 'westus2'
 param appServiceName string
 param appServicePlanName string
 
