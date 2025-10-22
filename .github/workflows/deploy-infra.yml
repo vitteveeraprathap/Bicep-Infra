@@ -26,17 +26,17 @@ jobs:
             develop)
               echo "env_name=qa" >> $GITHUB_OUTPUT
               echo "resource_group=sandbox" >> $GITHUB_OUTPUT
-              echo "location=westus2" >> $GITHUB_OUTPUT
+              echo "location=southeastasia" >> $GITHUB_OUTPUT
               ;;
             main)
               echo "env_name=prod" >> $GITHUB_OUTPUT
               echo "resource_group=sandbox" >> $GITHUB_OUTPUT
-              echo "location=westus2" >> $GITHUB_OUTPUT
+              echo "location=southeastasia" >> $GITHUB_OUTPUT
               ;;
             *)
               echo "env_name=dev" >> $GITHUB_OUTPUT
               echo "resource_group=sandbox" >> $GITHUB_OUTPUT
-              echo "location=westus2" >> $GITHUB_OUTPUT
+              echo "location=southeastasia" >> $GITHUB_OUTPUT
               ;;
           esac
 
